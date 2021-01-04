@@ -1,0 +1,52 @@
+.app__body {
+    color: rgb(54, 54, 54);
+}
+
+.top {
+    font-size: 1.4rem;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.top__filter__text {
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.top__filter__years {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn_year {
+    margin: 0 10px 10px 0;
+    font-size: 1.4rem;
+}
+
+.btn_year:last-child {
+    margin-right: 0;
+}
+
+.top__main {
+    margin: 20px;
+}
+.top_main__year {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.photo_list {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+}
+
+.no-photos {
+    width: 100%;
+    text-align: center;
+}

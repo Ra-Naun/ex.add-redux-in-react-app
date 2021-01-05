@@ -39,9 +39,9 @@ const Body = ({ page }) => {
                     </div>
                 </div>
                 <div className="top__main">
-                    <div className="top_main__year">{page.year}</div>
+                    <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div>
 
-                    <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={i} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
+                    <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
                 </div>
             </div>
         </div>

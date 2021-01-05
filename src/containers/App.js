@@ -10,15 +10,15 @@ import Body from "./app/Body";
 
 //actions
 import { getPhotos } from "../actions/pageActions";
-import { login } from "../actions/userActions";
+import { login, logout } from "../actions/userActions";
 
 import PropTypes from "prop-types";
 
-import { VK_init } from "../utils/VK_init";
+import "../utils/VK_init"; //F12
 
-function App({ user, login, page, getPhotos }) {
-    VK_init(); //F12
+function App({ user, login, logout, page, getPhotos }) {
     user.login = login;
+    user.logout = logout;
     page.getPhotos = getPhotos;
 
     const need_to_log_in = "Необходимо авторизоваться, чтобы продолжить...";
@@ -37,6 +37,8 @@ App.propTypes = {
     user: PropTypes.object.isRequired,
     page: PropTypes.object.isRequired,
     getPhotos: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({ user: store.user, page: store.page });
@@ -44,6 +46,7 @@ const mapStateToProps = (store) => ({ user: store.user, page: store.page });
 const mapDispatchToProps = (dispatch) => ({
     getPhotos: (year) => dispatch(getPhotos(year)),
     login: () => dispatch(login()),
+    logout: () => dispatch(logout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

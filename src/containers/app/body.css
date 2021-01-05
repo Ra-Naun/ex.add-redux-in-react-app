@@ -50,3 +50,8 @@
     width: 100%;
     text-align: center;
 }
+
+.error {
+    margin: 10px;
+    color: red;
+}

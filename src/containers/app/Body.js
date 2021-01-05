@@ -13,6 +13,18 @@ const Body = ({ page }) => {
         page.getPhotos(_year);
     };
 
+    const RenderTemplate = () => {
+        if (page.error) {
+            return <p className="error">Во время загрузки фото произошла ошибка</p>;
+        }
+
+        if (page.isFetching) {
+            return <p>Загрузка...</p>;
+        } else {
+            return <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>;
+        }
+    };
+
     return (
         <div className="app__body container">
             <div className="top">
@@ -40,8 +52,7 @@ const Body = ({ page }) => {
                 </div>
                 <div className="top__main">
                     <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div>
-
-                    <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
+                    <RenderTemplate />
                 </div>
             </div>
         </div>

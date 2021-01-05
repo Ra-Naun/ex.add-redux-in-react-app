@@ -1,7 +1,7 @@
 import { GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAIL } from "../actions/actionTypes";
 
 const initialState = {
-    year: 2021,
+    year: "Укажите ",
     photos: [],
     isFetching: false,
     error: "",
@@ -13,7 +13,7 @@ export const pageReducer = (state = initialState, action) => {
             return { ...state, year: action.payload, isFetching: true };
 
         case GET_PHOTOS_SUCCESS:
-            return { ...state, photos: action.payload, isFetching: false };
+            return { ...state, photos: action.payload, isFetching: false, error: "" };
         case GET_PHOTOS_FAIL:
             return { ...state, isFetching: false, error: action.payload.message };
         default:

@@ -6,7 +6,7 @@ const PhotoItem = ({ photo }) => {
     return (
         <li className="el">
             <div className="el_container">
-                <div class="img_container">
+                <div className="img_container">
                     <img className="el__photo" src={photo.sizes[photo.sizes.length - 1].url} alt="you_photo" />
                 </div>
                 <div className="likes">
@@ -18,7 +18,7 @@ const PhotoItem = ({ photo }) => {
 };
 
 PhotoItem.propTypes = {
-    photo: PropTypes.string.isRequired,
+    photo: PropTypes.object.isRequired,
 };
 
 export default PhotoItem;

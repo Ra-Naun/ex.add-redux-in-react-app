@@ -4,11 +4,9 @@ import PropTypes from "prop-types";
 
 const Auth = ({ user }) => {
     const signIn = () => {
-        console.log("`~~login");
         user.login();
     };
     const signOut = () => {
-        console.log("`~~logout");
         user.logout();
     };
 

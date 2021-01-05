@@ -1,8 +1,9 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL } from "../actions/actionTypes";
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, SET_SEARCH_MID } from "../actions/actionTypes";
 
 const initialState = {
     name: "$�anon�mous��_�",
     mid: null,
+    search_mid: null,
     isFetching: false,
     isAuthorized: false,
     error: "",
@@ -22,6 +23,8 @@ export const userReducer = (state = initialState, action) => {
             return { ...initialState };
         case LOGOUT_FAIL:
             return { ...state, isFetching: false, error: action.payload.message };
+        case SET_SEARCH_MID:
+            return { ...state, search_mid: action.payload };
         default:
             return state;
     }

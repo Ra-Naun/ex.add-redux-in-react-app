@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL } from "./actionTypes";
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, SET_SEARCH_MID } from "./actionTypes";
 
 export const login = () => {
     return function (dispatch) {
@@ -35,7 +35,6 @@ export const logout = () => {
         });
         //eslint-disable-next-line no-undef
         VK.Auth.logout((r) => {
-            console.log("~ r: ", r);
             if (r) {
                 dispatch({
                     type: LOGOUT_SUCCESS,
@@ -47,6 +46,15 @@ export const logout = () => {
                     payload: new Error("LogOut ERROR"),
                 });
             }
+        });
+    };
+};
+
+export const setSearchMID = (search_mid) => {
+    return function (dispatch) {
+        dispatch({
+            type: SET_SEARCH_MID,
+            payload: search_mid,
         });
     };
 };

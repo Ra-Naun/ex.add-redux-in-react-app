@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { connect } from "react-redux";
 
@@ -9,24 +9,22 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import Body from "./app/Body";
 
 //actions
-import { setYear } from "../actions/pageActions";
-import { setIsAuthorized, setUserName } from "../actions/userActions";
+import { getPhotos } from "../actions/pageActions";
+import { login } from "../actions/userActions";
 
-import logo from "../media/logo.svg"; //~dell
 import PropTypes from "prop-types";
 
-function App({ user, page, setYear, setUserName, setIsAuthorized }) {
-    user.setIsAuthorized = setIsAuthorized;
-    user.setUserName = setUserName;
-    console.log("App user:", user);
+function App({ user, login, page, getPhotos }) {
+    user.login = login;
+    page.getPhotos = getPhotos;
 
-    const _ex_arr_photos = [logo, logo, logo, logo, logo, logo, logo, logo, logo];
+    const need_to_log_in = "Необходимо авторизоваться, чтобы продолжить...";
 
     return (
         <ErrorBoundary>
             <div className="App">
                 <Header user={user} />
-                <Body year={page.year} photos={page.photos} setYear={setYear} />
+                {user.isAuthorized ? <Body page={page} /> : <p className="need_to_log_in">{need_to_log_in}</p>}
             </div>
         </ErrorBoundary>
     );
@@ -35,16 +33,14 @@ function App({ user, page, setYear, setUserName, setIsAuthorized }) {
 App.propTypes = {
     user: PropTypes.object.isRequired,
     page: PropTypes.object.isRequired,
-    setYear: PropTypes.func.isRequired,
-    setUserName: PropTypes.func.isRequired,
+    getPhotos: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({ user: store.user, page: store.page });
 
-const mapDispatchToPros = (dispatch) => ({
-    setYear: (year) => dispatch(setYear(year)),
-    setUserName: (name) => dispatch(setUserName(name)),
-    setIsAuthorized: (isAuthorized) => dispatch(setIsAuthorized(isAuthorized)),
+const mapDispatchToProps = (dispatch) => ({
+    getPhotos: (year) => dispatch(getPhotos(year)),
+    login: () => dispatch(login()),
 });
 
-export default connect(mapStateToProps, mapDispatchToPros)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

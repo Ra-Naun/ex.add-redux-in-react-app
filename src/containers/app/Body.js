@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import "./body.css";
 import PhotoItem from "./body/PhotoItem";
 import PropTypes from "prop-types";
 
-const Body = ({ year, photos, setYear }) => {
+const Body = ({ page }) => {
     const NO_PHOTOS = "В этом году у вас не было новых фотографий...";
+
+    console.log("Body page:", page);
 
     const onBtnYearClick = (e) => {
         const _year = +e.currentTarget.innerText;
-        setYear(_year);
-        // if (_year === 2020) {
-        //     setPhotos(_ex_arr_photos);
-        // } else setPhotos([]);
+        page.getPhotos(_year);
     };
 
     return (
@@ -40,9 +39,9 @@ const Body = ({ year, photos, setYear }) => {
                     </div>
                 </div>
                 <div className="top__main">
-                    <div className="top_main__year">{year}</div>
+                    <div className="top_main__year">{page.year}</div>
 
-                    <ul className="photo_list">{photos.length > 0 ? photos.map((photo, i) => <PhotoItem key={i} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
+                    <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={i} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
                 </div>
             </div>
         </div>
@@ -50,8 +49,7 @@ const Body = ({ year, photos, setYear }) => {
 };
 
 Body.propTypes = {
-    year: PropTypes.number.isRequired,
-    photos: PropTypes.array.isRequired,
+    page: PropTypes.object.isRequired,
 };
 
 export default Body;

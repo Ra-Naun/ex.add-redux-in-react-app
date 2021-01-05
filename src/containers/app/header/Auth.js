@@ -1,20 +1,13 @@
 import React from "react";
 import "./auth.css";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-const Auth = ({user}) => {
-    
+const Auth = ({ user }) => {
     const signIn = () => {
-        setTimeout(() => {
-            user.setUserName("Alex");
-            user.setIsAuthorized(true);
-        }, 700);
+        user.login();
     };
     const signOut = () => {
-        setTimeout(() => {
-            user.setUserName("anonymous");
-            user.setIsAuthorized(false);
-        }, 500);
+        setTimeout(() => {}, 500);
     };
 
     return (
@@ -26,10 +19,10 @@ const Auth = ({user}) => {
             </label>
         </div>
     );
-}
+};
 
 Auth.propTypes = {
-
-  }
+    user: PropTypes.object.isRequired,
+};
 
 export default Auth;

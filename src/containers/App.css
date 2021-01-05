@@ -3,4 +3,16 @@
     flex-direction: column;
     justify-content: start;
     color: #ccc;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.need_to_log_in {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.3);
+    background: #1a1a1a;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.5);
+    height: 90vh;
+    padding: 20px;
 }

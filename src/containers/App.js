@@ -14,7 +14,10 @@ import { login } from "../actions/userActions";
 
 import PropTypes from "prop-types";
 
+import { VK_init } from "../utils/VK_init";
+
 function App({ user, login, page, getPhotos }) {
+    VK_init(); //F12
     user.login = login;
     page.getPhotos = getPhotos;
 

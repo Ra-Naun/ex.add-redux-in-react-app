@@ -10,7 +10,6 @@ export const login = () => {
         VK.Auth.login((r) => {
             if (r.session) {
                 const username = r.session.user.first_name;
-
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: username,

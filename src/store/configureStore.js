@@ -2,7 +2,7 @@ import { applyMiddleware, createStore } from "redux";
 import { rootReducer } from "../reducers/index";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
-//eslint-disable-next-line
+
 const mw = (store) => (next) => (action) => {
     console.log("mv store: ", store);
     console.log("mv next: ", next);
@@ -13,4 +13,4 @@ const mw = (store) => (next) => (action) => {
     return hz;
 };
 
-export const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+export const store = createStore(rootReducer, applyMiddleware(mw, thunk, logger));

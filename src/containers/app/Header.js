@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../media/logo.svg";
 import "./header.css";
 import Auth from "./header/Auth";
 import PropTypes from "prop-types";
 
 const Header = ({ user }) => {
+    useEffect(() => {
+        console.info("Header render");
+    });
     const welcome_word = `Welcome, `;
 
     const RenderTemplate = () => {

@@ -1,22 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./body.css";
 import PhotoItem from "./body/PhotoItem";
 import PropTypes from "prop-types";
 
-const Body = ({ page, user }) => {
-    const NO_PHOTOS = "В этом году у вас не было новых фотографий...";
+const Body = ({ page }) => {
+    useEffect(() => {
+        console.info("Body render");
+    });
 
-    console.log("Body page:", page);
+    const NO_PHOTOS = "В этом году у вас не было новых фотографий...";
 
     const onBtnYearClick = (e) => {
         const _year = +e.currentTarget.innerText;
-        console.log("user.search_mid || user.mid", user.search_mid || user.mid);
-        page.getPhotos(_year, user.search_mid || user.mid);
+        page.getPhotos(_year, page.search_mid);
     };
 
     const onChange = (e) => {
         const search_mid = e.currentTarget.value;
-        user.setSearchMID(search_mid);
+
+        if (!search_mid) {
+            console.log("restoreDefaultSearchMID");
+            page.restoreDefaultSearchMID();
+        } else page.setSearchMID(search_mid);
     };
 
     return (
@@ -31,30 +36,39 @@ const Body = ({ page, user }) => {
                             </div>
                         </details>
 
-                        {!user.search_mid ? <p>Мой топ фото по годам</p> : <p>Топ фото по годам пользователя {user.search_mid}</p>}
+                        {!page.search_mid ? <p>Мой топ фото по годам</p> : <p>Топ фото по годам пользователя {page.search_mid}</p>}
                     </div>
                     <div className="top__filter__years">
-                        <button className="btn btn-info btn_year" onClick={onBtnYearClick}>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2017
                         </button>
-                        <button className="btn btn-info btn_year" onClick={onBtnYearClick}>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2018
                         </button>
-                        <button className="btn btn-info btn_year" onClick={onBtnYearClick}>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2019
                         </button>
-                        <button className="btn btn-info btn_year" onClick={onBtnYearClick}>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2020
                         </button>
-                        <button className="btn btn-info btn_year" onClick={onBtnYearClick}>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2021
                         </button>
                     </div>
                 </div>
                 <div className="top__main">
-                    <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div>
-
-                    <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo, i) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
+                    {page.isFetching ? (
+                        <p>Loading...</p>
+                    ) : (
+                        page.year && (
+                            <>
+                                <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div>
+                                <ul className="photo_list">
+                                    {page.photos.length > 0 ? page.photos.map((photo) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}
+                                </ul>
+                            </>
+                        )
+                    )}
                 </div>
             </div>
         </div>
@@ -63,7 +77,6 @@ const Body = ({ page, user }) => {
 
 Body.propTypes = {
     page: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
 };
 
 export default Body;

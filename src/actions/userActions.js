@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, SET_SEARCH_MID } from "./actionTypes";
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, SET_DEFAULT_SEARCH_MID, RESTORE_DEFAULT_SEARCH_MID } from "./actionTypes";
 
 export const login = () => {
     return function (dispatch) {
@@ -16,6 +16,14 @@ export const login = () => {
                         username: username,
                         mid: mid,
                     },
+                });
+                dispatch({
+                    type: SET_DEFAULT_SEARCH_MID,
+                    payload: mid,
+                });
+                dispatch({
+                    type: RESTORE_DEFAULT_SEARCH_MID,
+                    payload: mid,
                 });
             } else {
                 dispatch({
@@ -39,6 +47,10 @@ export const logout = () => {
                 dispatch({
                     type: LOGOUT_SUCCESS,
                 });
+                dispatch({
+                    type: SET_DEFAULT_SEARCH_MID,
+                    payload: null,
+                });
             } else {
                 dispatch({
                     type: LOGOUT_FAIL,
@@ -46,15 +58,6 @@ export const logout = () => {
                     payload: new Error("LogOut ERROR"),
                 });
             }
-        });
-    };
-};
-
-export const setSearchMID = (search_mid) => {
-    return function (dispatch) {
-        dispatch({
-            type: SET_SEARCH_MID,
-            payload: search_mid,
         });
     };
 };

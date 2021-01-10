@@ -1,7 +1,10 @@
-import { GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAIL } from "./actionTypes";
+import { GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAIL, SET_SEARCH_MID, RESTORE_DEFAULT_SEARCH_MID } from "./actionTypes";
+
+const ActionsFactory = (type) => (payload) => (dispatch) => dispatch({ type, payload });
+export const setSearchMID = ActionsFactory(SET_SEARCH_MID);
+export const restoreDefaultSearchMID = ActionsFactory(RESTORE_DEFAULT_SEARCH_MID);
 
 let photosArr = [];
-
 let cached = false;
 let chahed_mid = null;
 
@@ -29,6 +32,7 @@ export const getPhotos = (year, mid) => {
         }
     };
 };
+
 const makeYearPhotos = (photos, selectedYear) => {
     let createdYear,
         yearPhotos = [];

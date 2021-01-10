@@ -23,8 +23,6 @@ export const userReducer = (state = initialState, action) => {
             return { ...initialState };
         case LOGOUT_FAIL:
             return { ...state, isFetching: false, error: action.payload.message };
-        case SET_SEARCH_MID:
-            return { ...state, search_mid: action.payload };
         default:
             return state;
     }

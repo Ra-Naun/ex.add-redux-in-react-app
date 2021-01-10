@@ -1,54 +1,64 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { connect } from "react-redux";
 
+//styles
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import Header from "./app/Header";
+//childs
 import ErrorBoundary from "../components/ErrorBoundary";
+import HeaderContainer from "./HeaderContainer";
 import Body from "./app/Body";
 
 //actions
-import { getPhotos } from "../actions/pageActions";
-import { login, logout, setSearchMID } from "../actions/userActions";
+import { getPhotos, setSearchMID, restoreDefaultSearchMID } from "../actions/pageActions";
 
 import PropTypes from "prop-types";
 
 import "../utils/VK_init"; //F12
 
-function App({ user, login, logout, page, getPhotos, setSearchMID }) {
-    user.login = login;
-    user.logout = logout;
-    user.setSearchMID = setSearchMID;
+function App({ page, getPhotos, setSearchMID, restoreDefaultSearchMID, user }) {
     page.getPhotos = getPhotos;
+    page.setSearchMID = setSearchMID;
+    page.restoreDefaultSearchMID = restoreDefaultSearchMID;
 
     const need_to_log_in = "Необходимо авторизоваться, чтобы продолжить...";
 
     return (
         <ErrorBoundary>
             <div className="App">
-                <Header user={user} />
-                {user.isAuthorized ? <Body page={page} user={user} /> : <p className="need_to_log_in">{need_to_log_in}</p>}
+                <HeaderContainer />
+                {user.isAuthorized ? <Body page={page} user_mid={user.mid} /> : <p className="need_to_log_in">{need_to_log_in}</p>}
             </div>
         </ErrorBoundary>
     );
 }
 
 App.propTypes = {
-    user: PropTypes.object.isRequired,
-    page: PropTypes.object.isRequired,
+    page: PropTypes.shape({
+        search_mid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        year: PropTypes.number,
+        photos: PropTypes.array.isRequired,
+        isFetching: PropTypes.bool.isRequired,
+        error: PropTypes.string,
+    }).isRequired,
     getPhotos: PropTypes.func.isRequired,
-    login: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
+    setSearchMID: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        mid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        isFetching: PropTypes.bool.isRequired,
+        isAuthorized: PropTypes.bool.isRequired,
+        error: PropTypes.string,
+    }).isRequired,
 };
 
 const mapStateToProps = (store) => ({ user: store.user, page: store.page });
 
 const mapDispatchToProps = (dispatch) => ({
     getPhotos: (year, mid) => dispatch(getPhotos(year, mid)),
-    login: () => dispatch(login()),
-    logout: () => dispatch(logout()),
     setSearchMID: (search_mid) => dispatch(setSearchMID(search_mid)),
+    restoreDefaultSearchMID: () => dispatch(restoreDefaultSearchMID()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -3,37 +3,59 @@ import { GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAIL, SET_SEARCH_MID
 const ActionsFactory = (type) => (payload) => (dispatch) => dispatch({ type, payload });
 export const setSearchMID = ActionsFactory(SET_SEARCH_MID);
 export const restoreDefaultSearchMID = ActionsFactory(RESTORE_DEFAULT_SEARCH_MID);
+const ActionGetPhotosSucces = ActionsFactory(GET_PHOTOS_SUCCESS);
+const ActionGetPhotosFail = ActionsFactory(GET_PHOTOS_FAIL);
+const ActionGetPhotosRequest = ActionsFactory(GET_PHOTOS_REQUEST);
 
-let photosArr = [];
+let AllUserPhotos = [];
 let cached = false;
 let chahed_mid = null;
 
-export const getPhotos = (year, mid) => {
+// filters.likes:
+//     1 = descending sort
+//     0 = not sort
+//     -1 = ascending sort
+export const getAllPhotos = (filters = { year: 0, likes: 0, mid: 0 }) => {
     return (dispatch) => {
-        dispatch({
-            type: GET_PHOTOS_REQUEST,
-            payload: year,
-        });
+        dispatch(ActionGetPhotosRequest(filters.year));
 
-        if (chahed_mid !== mid) {
+        if (chahed_mid !== filters.mid) {
             //если запрос по данному пользователю/группе не повторный
             cached = false;
-            photosArr = [];
+            AllUserPhotos = [];
         }
-        if (cached) {
-            let yearPhotos = makeYearPhotos(photosArr, year);
-            dispatch({
-                type: GET_PHOTOS_SUCCESS,
-                payload: yearPhotos,
+
+        if (!cached) {
+            const promise = new Promise((resolve, reject) => {
+                chahed_mid = filters.mid;
+                getMorePhotos(0, 200, filters.mid, { resolve, reject });
             });
-        } else {
-            chahed_mid = mid;
-            getMorePhotos(0, 200, year, dispatch, mid);
+
+            // promise.then навешивает обработчики на успешный результат или ошибку
+            promise.then(
+                (result) => {
+                    // первая функция-обработчик - запустится при вызове resolve
+                    console.log("Fulfilled: ", result); // result - аргумент resolve
+                    AllUserPhotos = result; //cached
+                    cached = true;
+                },
+                (error) => {
+                    // вторая функция - запустится при вызове reject
+                    console.log("Rejected: ", error); // error - аргумент reject
+                    dispatch(ActionGetPhotosFail(new Error(error)));
+                    return;
+                }
+            );
         }
+
+        let photos = [...AllUserPhotos];
+        if (filters.year) photos = selectByOneYear(photos, filters.year);
+        photos = sortByLikes(photos, filters.likes);
+        dispatch(ActionGetPhotosSucces(photos));
     };
 };
 
-const makeYearPhotos = (photos, selectedYear) => {
+const selectByOneYear = (photos, selectedYear) => {
     let createdYear,
         yearPhotos = [];
 
@@ -49,29 +71,40 @@ const makeYearPhotos = (photos, selectedYear) => {
     return yearPhotos;
 };
 
-const getMorePhotos = (offset, count, year, dispatch, mid) => {
-    //eslint-disable-next-line no-undef
-    VK.Api.call("photos.getAll", { owner_id: mid, extended: 1, count: count, offset: offset, v: "5.80" }, (r) => {
-        try {
-            console.log("getMorePhotos response: ", r);
-            photosArr = [...photosArr, ...r.response.items];
-            if (offset <= r.response.count) {
-                offset += 200; // максимальное количество фото которое можно получить за 1 запрос
-                getMorePhotos(offset, count, year, dispatch, mid);
-            } else {
-                let photos = makeYearPhotos(photosArr, year);
-                cached = true;
-                dispatch({
-                    type: GET_PHOTOS_SUCCESS,
-                    payload: photos,
-                });
+const sortByLikes = (photos, sort) => {
+    let yearPhotos = [...photos];
+    switch (sort) {
+        case 1:
+            return yearPhotos.sort((a, b) => a.likes.count - b.likes.count);
+        case -1:
+            return yearPhotos.sort((a, b) => b.likes.count - a.likes.count);
+
+        default:
+            return yearPhotos;
+    }
+};
+
+const getMorePhotos = (offset, count, mid, promise) => {
+    let photosArr = [];
+
+    (function downloadPart() {
+        //eslint-disable-next-line no-undef
+        VK.Api.call("photos.getAll", { owner_id: mid, extended: 1, count: count, offset: offset, v: "5.80" }, (r) => {
+            try {
+                const idTimeout = setTimeout(() => {
+                    promise.reject(new Error("Timeout Error"));
+                }, 10000);
+                photosArr = [...photosArr, ...r.response.items];
+                if (offset <= r.response.count) {
+                    offset += 200; // максимальное количество фото которое можно получить за 1 запрос
+                    downloadPart();
+                } else {
+                    clearTimeout(idTimeout);
+                    promise.resolve(photosArr);
+                }
+            } catch (e) {
+                promise.reject(e);
             }
-        } catch (e) {
-            dispatch({
-                type: GET_PHOTOS_FAIL,
-                error: true,
-                payload: new Error(e),
-            });
-        }
-    });
+        });
+    })();
 };

@@ -3,7 +3,7 @@ import "./body.css";
 import PhotoItem from "./body/PhotoItem";
 import PropTypes from "prop-types";
 
-const Body = ({ page }) => {
+const Body = ({ page, years_for_btns }) => {
     useEffect(() => {
         console.info("Body render");
     });
@@ -12,7 +12,14 @@ const Body = ({ page }) => {
 
     const onBtnYearClick = (e) => {
         const _year = +e.currentTarget.innerText;
-        page.getPhotos(_year, page.search_mid);
+        if (e.currentTarget.innerText.toString().toUpperCase() === "ALL") {
+            console.log("ALL");
+            console.log("page: ", page);
+            page.getPhotos(0, -1, page.search_mid);
+        } else {
+            console.log("_year: ", _year);
+            page.getPhotos(_year, -1, page.search_mid);
+        }
     };
 
     const onChange = (e) => {
@@ -40,6 +47,9 @@ const Body = ({ page }) => {
                     </div>
                     <div className="top__filter__years">
                         <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
+                            ALL
+                        </button>
+                        <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
                             2017
                         </button>
                         <button className="btn btn-info btn_year" onClick={onBtnYearClick} disabled={page.isFetching}>
@@ -60,14 +70,11 @@ const Body = ({ page }) => {
                     {page.isFetching ? (
                         <p>Loading...</p>
                     ) : (
-                        page.year && (
-                            <>
-                                <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div>
-                                <ul className="photo_list">
-                                    {page.photos.length > 0 ? page.photos.map((photo) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}
-                                </ul>
-                            </>
-                        )
+                        <>
+                            {page.year ? <div className="top_main__year">{`${page.year} год [${page.photos.length}]`}</div> : <div className="top_main__year">{`ALL [${page.photos.length}]`}</div>}
+
+                            <ul className="photo_list">{page.photos.length > 0 ? page.photos.map((photo) => <PhotoItem key={photo.id} photo={photo} />) : <p className="no-photos">{NO_PHOTOS}</p>}</ul>
+                        </>
                     )}
                 </div>
             </div>

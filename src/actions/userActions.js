@@ -1,4 +1,5 @@
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, SET_DEFAULT_SEARCH_MID, RESTORE_DEFAULT_SEARCH_MID } from "./actionTypes";
+import { getAllPhotos } from "./pageActions";
 
 export const login = () => {
     return function (dispatch) {
@@ -25,6 +26,7 @@ export const login = () => {
                     type: RESTORE_DEFAULT_SEARCH_MID,
                     payload: mid,
                 });
+                getAllPhotos({ year: 0, likes: 0, mid: mid });
             } else {
                 dispatch({
                     type: LOGIN_FAIL,

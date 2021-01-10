@@ -13,7 +13,6 @@ export const pageReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_PHOTOS_REQUEST:
             return { ...state, year: action.payload, isFetching: true, photos: [] };
-
         case GET_PHOTOS_SUCCESS:
             return { ...state, photos: action.payload, isFetching: false };
         case GET_PHOTOS_FAIL:

@@ -38,6 +38,7 @@ export const getAllPhotos = (filters = { year: 0, likes: 0, mid: 0 }) => {
                     console.log("Fulfilled: ", result); // result - аргумент resolve
                     AllUserPhotos = result; //cached
                     cached = true;
+                    SortPhotosAndDispatch();
                 },
                 (error) => {
                     // вторая функция - запустится при вызове reject
@@ -46,12 +47,14 @@ export const getAllPhotos = (filters = { year: 0, likes: 0, mid: 0 }) => {
                     return;
                 }
             );
-        }
+        } else SortPhotosAndDispatch();
 
-        let photos = [...AllUserPhotos];
-        if (filters.year) photos = selectByOneYear(photos, filters.year);
-        photos = sortByLikes(photos, filters.likes);
-        dispatch(ActionGetPhotosSucces(photos));
+        function SortPhotosAndDispatch() {
+            let photos = [...AllUserPhotos];
+            if (filters.year) photos = selectByOneYear(photos, filters.year);
+            photos = sortByLikes(photos, filters.likes);
+            dispatch(ActionGetPhotosSucces(photos));
+        }
     };
 };
 

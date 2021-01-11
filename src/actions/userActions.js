@@ -26,7 +26,7 @@ export const login = () => {
                     type: RESTORE_DEFAULT_SEARCH_MID,
                     payload: mid,
                 });
-                getAllPhotos({ year: 0, likes: 0, mid: mid });
+                dispatch(getAllPhotos({ year: 0, likes: 0, mid: mid }));
             } else {
                 dispatch({
                     type: LOGIN_FAIL,

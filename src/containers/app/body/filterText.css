@@ -1,0 +1,11 @@
+.top__filter__text {
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.search_mid {
+    background: #ccc;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10%;
+}

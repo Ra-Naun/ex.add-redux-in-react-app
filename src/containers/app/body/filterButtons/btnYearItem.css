@@ -1,0 +1,11 @@
+.btn_year-el {
+    list-style: none;
+    margin: 0 10px 10px 0;
+}
+.btn_year {
+    font-size: 1.4rem;
+}
+
+.btn_year-el:last-child {
+    margin-right: 0;
+}

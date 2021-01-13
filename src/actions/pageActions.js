@@ -28,7 +28,7 @@ export const getAllPhotos = (filters = { year: 0, likes: 0, mid: 0 }) => {
         if (!cached) {
             const promise = new Promise((resolve, reject) => {
                 chahed_mid = filters.mid;
-                getMorePhotos(0, 200, filters.mid, { resolve, reject });
+                fetchMorePhotos(0, 200, filters.mid, { resolve, reject });
             });
 
             // promise.then навешивает обработчики на успешный результат или ошибку
@@ -87,16 +87,16 @@ const sortByLikes = (photos, sort) => {
     }
 };
 
-const getMorePhotos = (offset, count, mid, promise) => {
+const fetchMorePhotos = (offset, count, mid, promise) => {
     let photosArr = [];
+    const idTimeout = setTimeout(() => {
+        promise.reject(new Error("Timeout Error"));
+    }, 10000);
 
     (function downloadPart() {
         //eslint-disable-next-line no-undef
         VK.Api.call("photos.getAll", { owner_id: mid, extended: 1, count: count, offset: offset, v: "5.80" }, (r) => {
             try {
-                const idTimeout = setTimeout(() => {
-                    promise.reject(new Error("Timeout Error"));
-                }, 10000);
                 photosArr = [...photosArr, ...r.response.items];
                 if (offset <= r.response.count) {
                     offset += 200; // максимальное количество фото которое можно получить за 1 запрос

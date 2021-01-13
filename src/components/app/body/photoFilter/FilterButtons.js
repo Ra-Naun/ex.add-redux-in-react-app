@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import BtnYearItem from "./filterButtons/btnYearItem";
 import "./filterButtons.css";
 
-const FilterButtons = ({ getPhotos, search_mid, years_for_btns, isFetching }) => {
+const FilterButtons = ({ getPhotos, search_mid, isFetching, yearListUniq }) => {
     const onBtnYearClick = (e) => {
         const _year = +e.currentTarget.innerText;
         if (isNaN(_year)) {
@@ -19,7 +19,7 @@ const FilterButtons = ({ getPhotos, search_mid, years_for_btns, isFetching }) =>
                     ALL
                 </button>
             </li>
-            {years_for_btns.map((year) => (
+            {yearListUniq.map((year) => (
                 <BtnYearItem key={year} onBtnYearClick={onBtnYearClick} year={year} isFetching={isFetching} />
             ))}
         </ul>

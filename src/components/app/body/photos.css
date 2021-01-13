@@ -1,16 +1,8 @@
-.app__body {
-    color: rgb(54, 54, 54);
-}
-
-.top {
-    font-size: 1.4rem;
-    width: 100%;
-    margin-top: 20px;
-}
-
 .top__main {
+    width: 100%;
     margin: 20px;
 }
+
 .top_main__year {
     text-align: center;
     font-size: 1.8rem;

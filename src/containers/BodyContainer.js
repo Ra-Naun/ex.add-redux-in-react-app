@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import Body from "./app/Body";
+import Body from "../components/app/Body";
 
 //actions
 import { getAllPhotos, setSearchMID, restoreDefaultSearchMID } from "../actions/pageActions";
@@ -60,7 +60,7 @@ const BodyContainer = ({ page, getPhotos, setSearchMID, restoreDefaultSearchMID,
     }, [page.search_mid, page.photos, cachedMid, prevPhotos, yearListUniq]);
 
     const need_to_log_in = "Необходимо авторизоваться, чтобы продолжить...";
-    return <>{user.isAuthorized ? <Body page={page} years_for_btns={yearListUniq} /> : <p className="need_to_log_in">{need_to_log_in}</p>}</>;
+    return <>{user.isAuthorized ? <Body page={page} yearListUniq={yearListUniq} /> : <p className="need_to_log_in">{need_to_log_in}</p>}</>;
 };
 
 BodyContainer.propTypes = {

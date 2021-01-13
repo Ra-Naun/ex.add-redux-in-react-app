@@ -1,6 +1,6 @@
 import React from "react";
-import "./photoItem.css";
-import PhotoItem from "./PhotoItem";
+import "./photos.css";
+import PhotoItem from "./photos/PhotoItem";
 import PropTypes from "prop-types";
 
 const Photos = ({ isFetching, year, photos }) => {

@@ -26,6 +26,7 @@ export const getAllPhotos = (filters = { year: 0, likes: 0, mid: 0 }) => {
         }
 
         if (!cached) {
+            //use revealing constructor pattern
             const promise = new Promise((resolve, reject) => {
                 chahed_mid = filters.mid;
                 fetchMorePhotos(0, 200, filters.mid, { resolve, reject });
